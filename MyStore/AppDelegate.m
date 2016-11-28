@@ -8,16 +8,14 @@
 
 #import "AppDelegate.h"
 
-
-// This notification is fired when the database is updated from the iCloud
+// This notification is fired when the database is updated from iCloud
 NSString * const SADatabaseUpdateNotification = @"SADatabaseUpdateNotification";
 
-// Get's posted when user switches iCloud support On/Off
+// Fires when user switches iCloud support On/Off
 NSString * const SADatabaseRestartNotification = @"SADatabaseRestartNotification";
 
 // Setting for iCloud Enable/Disable switch
 NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
-
 
 @implementation AppDelegate
 
@@ -25,66 +23,43 @@ NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-/*
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
-    
-*/
-    
-    // NSShadow* shadow = [NSShadow new];
-    // shadow.shadowOffset = CGSizeMake(0.0f, 1.0f);
-    // shadow.shadowColor = [UIColor blackColor];
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[UINavigationBar appearance] setTitleTextAttributes: @{
                                                             NSForegroundColorAttributeName: [UIColor whiteColor],
                                                             NSFontAttributeName: [UIFont fontWithName:@"Lobster" size:30.0f],
                                                             // NSShadowAttributeName: shadow
                                                             }];
     
-    // Set default setting
+    // Set user defaults
     if (![[NSUserDefaults standardUserDefaults] objectForKey:kSettingsiCloudEnabledKey]) {
         [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:kSettingsiCloudEnabledKey];
     }
-    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application
-{
+- (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
+- (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
+- (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
+- (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
-{
+- (void)applicationWillTerminate:(UIApplication *)application {
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
 }
-
-
-
-
 
 
 #pragma mark - Core Data Save
@@ -104,13 +79,9 @@ NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
 }
 
 
-
-
-
 #pragma mark - Change iCloud Status
 
-- (void)restartDatabase
-{
+- (void)restartDatabase {
     // Reset context and start database from beginning
     _persistentStoreCoordinator = nil;
     _managedObjectContext = nil;
@@ -119,15 +90,11 @@ NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
 }
 
 
-
-
-
 #pragma mark - Core Data stack
 
-// Returns the managed object model for the application.
-// If the model doesn't already exist, it is created from the application's model.
-- (NSManagedObjectModel *)managedObjectModel
-{
+// Returns the managed object model for the application
+// If the model doesn't already exist, it is created from the application's model
+- (NSManagedObjectModel *)managedObjectModel {
     if (_managedObjectModel != nil) {
         return _managedObjectModel;
     }
@@ -137,13 +104,11 @@ NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
 }
 
 // Returns the persistent store coordinator for the application.
-// If the coordinator doesn't already exist, it is created and the application's store added to it.
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
-{
+// If the coordinator doesn't already exist, it is created and stored in the application.
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
     if (_persistentStoreCoordinator != nil) {
         return _persistentStoreCoordinator;
     }
-    
     
     NSFileManager * fileManager = [NSFileManager defaultManager];
     NSError *error = nil;
@@ -157,28 +122,27 @@ NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
             return nil;
         }
     }
-    
-    
+
     NSDictionary * options;
     
-    
-    
+    // If user has iCloud enabled
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:kSettingsiCloudEnabledKey] boolValue]) {
-        // Store file
+        
+        // Store file in iCloud
         storeURL = [storeURL URLByAppendingPathComponent:@"MyStoreCloud.lite"];
         
-        // Store options
+        // Store settings
         options = @{NSPersistentStoreUbiquitousContentNameKey: @"Transanctions",
                     NSPersistentStoreUbiquitousContainerIdentifierKey: @"85N3S3DG8M.com.revblaze.Code-Master",
                     NSMigratePersistentStoresAutomaticallyOption: @YES,
                     NSInferMappingModelAutomaticallyOption: @YES};
-        
-        
+    
+    // If user has iCloud disabled
     } else {
-        // Store file
+        // Store file on device
         storeURL = [storeURL URLByAppendingPathComponent:@"MyStore.lite"];
         
-        // Store options
+        // Store settings
         options = @{NSMigratePersistentStoresAutomaticallyOption: @YES,
                     NSInferMappingModelAutomaticallyOption: @YES};
     }
@@ -212,15 +176,13 @@ NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
 }
 
 
-- (NSManagedObjectContext *)managedObjectContext
-{
+- (NSManagedObjectContext *)managedObjectContext {
     if (_managedObjectContext != nil) {
         return _managedObjectContext;
     }
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    if (coordinator != nil)
-    {
+    if (coordinator != nil) {
         // Make life easier by adopting the new NSManagedObjectContext concurrency API
         // the NSMainQueueConcurrencyType is good for interacting with views and controllers since
         // they are all bound to the main thread anyway
@@ -243,9 +205,8 @@ NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
     return _managedObjectContext;
 }
 
-
-- (void)mergeiCloudChanges:(NSNotification *)notification
-{
+// Merges iCloud modifications made to items stored
+- (void)mergeiCloudChanges:(NSNotification *)notification {
     
     // NSNotifications are posted synchronously on the caller's thread
     // make sure to vector this back to the thread we want, in this case
@@ -256,8 +217,6 @@ NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
     // otherwise use a dispatch_async back to the main thread yourself
     __weak AppDelegate * weakSelf = self;
     [self.managedObjectContext performBlock:^{
-        
-        
         
         // this takes the NSPersistentStoreDidImportUbiquitousContentChangesNotification
         // and transforms the userInfo dictionary into something that
@@ -274,13 +233,9 @@ NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
 }
 
 
-
-
-
 #pragma mark - Asynchronous iCloud Store Handlers
 
-- (void)persistentStoreCoordinatorWillChange:(NSNotification *)notification
-{
+- (void)persistentStoreCoordinatorWillChange:(NSNotification *)notification {
     // Save any unsaved user changes before persistent store change
     if ([self.managedObjectContext hasChanges]) {
         [self.managedObjectContext save:nil];
@@ -288,8 +243,7 @@ NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
     [self.managedObjectContext reset];
 }
 
-- (void)persistentStoreCoordinatorDidChange:(NSNotification *)notification
-{
+- (void)persistentStoreCoordinatorDidChange:(NSNotification *)notification {
     // Update UI
     __weak AppDelegate * weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -297,10 +251,10 @@ NSString * const kSettingsiCloudEnabledKey = @"kSettingsiCloudEnabledKey";
     });
 }
 
+
 #pragma mark - Background context save notification
 
-- (void)handleBackgroundContextDidSaveNotification:(NSNotification *)note
-{
+- (void)handleBackgroundContextDidSaveNotification:(NSNotification *)note {
     __weak AppDelegate * weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.managedObjectContext mergeChangesFromContextDidSaveNotification:note];

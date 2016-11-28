@@ -9,15 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <TWMessageBarManager/TWMessageBarManager.h>
 
-// This notification is fired when the database is updated from the iCloud
+// This notification is fired when the database is updated from iCloud
 extern NSString * const SADatabaseUpdateNotification;
 
-// Get's posted when user switches iCloud support On/Off
+// Fires when user switches iCloud support On/Off
 extern NSString * const SADatabaseRestartNotification;
 
 // Setting for iCloud Enable/Disable switch
 extern NSString * const kSettingsiCloudEnabledKey;
-
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -29,8 +28,8 @@ extern NSString * const kSettingsiCloudEnabledKey;
 
 - (void)saveContext;
 
-
-// Restarts database if user changed settings
+// Reloads local database if user changes iCloud settings
 - (void)restartDatabase;
+
 
 @end

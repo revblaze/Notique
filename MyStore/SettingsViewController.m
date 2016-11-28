@@ -18,8 +18,7 @@
 
 @implementation SettingsViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
@@ -27,34 +26,31 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
     [[self navigationController] setToolbarHidden:NO animated:YES];
 
-    // Load iCloud Enabled setting
+    // iCloud Switch turned ON
     BOOL iCloudOn = [[[NSUserDefaults standardUserDefaults] objectForKey:kSettingsiCloudEnabledKey] boolValue];
     [self.iCloudSwitch setOn:iCloudOn];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
--(void)viewDidAppear:(BOOL)animated
-{
+-(void)viewDidAppear:(BOOL)animated {
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
     [[self navigationController] setToolbarHidden:NO animated:YES];
 }
 
+
 #pragma mark - Actions
 
-- (IBAction)icloudAction:(id)sender
-{
+- (IBAction)icloudAction:(id)sender {
     // Save iCloud Enabled Setting
     [[NSUserDefaults standardUserDefaults] setObject:@(self.iCloudSwitch.isOn) forKey:kSettingsiCloudEnabledKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -73,5 +69,6 @@
                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
                          }];
 }
+
 
 @end

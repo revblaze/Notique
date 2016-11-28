@@ -17,4 +17,5 @@
 @property (nonatomic, retain) DeviceViewController *deviceViewController;
 @property (weak, nonatomic) IBOutlet UIImageView *logScreen;
 
+
 @end

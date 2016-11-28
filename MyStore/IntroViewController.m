@@ -14,8 +14,7 @@
 
 @implementation IntroViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -23,8 +22,7 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     [self showIntro];
@@ -95,5 +93,6 @@
                      animations:^{
                          _logScreen.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);}
                      completion:NULL];}}];}
+
 
 @end

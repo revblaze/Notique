@@ -28,8 +28,7 @@
 
 #define VERTICAL_KEYRBOARD_MARGIN 4.0f
 
-- (NSManagedObjectContext *)managedObjectContext
-{
+- (NSManagedObjectContext *)managedObjectContext {
     NSManagedObjectContext *context = nil;
     id delegate = [[UIApplication sharedApplication] delegate];
     if ([delegate performSelector:@selector(managedObjectContext)]) {
@@ -38,8 +37,7 @@
     return context;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -47,8 +45,7 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     [self observeKeyboard];
     
@@ -94,14 +91,13 @@
     [self ignoreKeyboard];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)save:(id)sender
-{
+// Save note to iCloud / local device
+- (IBAction)save:(id)sender {
     NSManagedObjectContext *context = [self managedObjectContext];
     
     if (self.device) {
@@ -136,8 +132,8 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)cancel:(id)sender
-{
+// Cancel changes made to existing note
+- (IBAction)cancel:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -186,7 +182,7 @@
     }
 }
 
-- (BOOL)textView:(UITextView *)companyTextField shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+- (BOOL)textView:(UITextView *)companyTextField shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     [companyTextField scrollRangeToVisible:range];
     return YES;
 }
@@ -195,6 +191,7 @@
     [textField resignFirstResponder];
     return NO;
 }
+
 
 #pragma mark -
 #pragma mark Keyboard Handling
@@ -216,8 +213,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)keyboardDidShow:(NSNotification *)aNotification
-{
+- (void)keyboardDidShow:(NSNotification *)aNotification {
     NSDictionary* info = [aNotification userInfo];
     CGRect kbRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     kbRect = [[self view] convertRect:kbRect fromView:nil];
@@ -288,6 +284,7 @@
 }
 
 // Alternative Custom Action Sheet
+// Used in earlier versions of Notique
 /*
 - (IBAction)showActionSheet:(id)sender {
  
@@ -436,9 +433,9 @@
 }
  */
 
--(void)dealloc
-{
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
 
 @end

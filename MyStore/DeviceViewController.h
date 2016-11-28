@@ -17,4 +17,5 @@
 
 @interface DeviceViewController : UITableViewController <EAIntroDelegate>
 
+
 @end
