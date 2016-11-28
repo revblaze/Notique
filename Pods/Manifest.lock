@@ -1,0 +1,10 @@
+PODS:
+  - TWMessageBarManager (1.3.0)
+
+DEPENDENCIES:
+  - TWMessageBarManager (~> 1.3.0)
+
+SPEC CHECKSUMS:
+  TWMessageBarManager: 82343e43813dba4e66e75bc73d265a361a661eed
+
+COCOAPODS: 0.27.1
